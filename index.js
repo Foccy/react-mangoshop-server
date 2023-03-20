@@ -1,8 +1,8 @@
 const express = require("express");
 const cors = require("cors");
-const models = require("./models");
 const multer = require("multer");
 
+const models = require("./models");
 const app = express();
 const port = 8080;
 
@@ -22,18 +22,19 @@ app.use(cors());
 app.use("/uploads", express.static("uploads"));
 
 app.get("/products", (req, res) => {
-	models.Product.findAll({
-		order: [["createdAt", "DESC"]],
-		attributes: ["id", "name", "price", "seller", "imageUrl", "createdAt"],
-	})
-		.then((result) => {
-			console.log("product 조회결과:", result);
-		})
-		.catch((err) => {
-			console.error(err);
-			res.send("에러발생");
-		});
+	models.Product.findAll()
+    .then((result) => {
+      console.log("PRODUCT : ", result);
+      res.send({
+        product: result,
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send("에러 발생");
+    });
 });
+
 
 app.get("/products/:id", (req, res) => {
 	const params = req.params;
